@@ -4,7 +4,7 @@ from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
 from ..prompts.keywords import KEYWORDS_SYSTEM_PROMPT, KEYWORDS_REQUEST
-from ..models.keywords import Keywords
+from ..models.keywords import Keywords, MoviesProperties
 
 from langchain_core.output_parsers import PydanticOutputParser
 
@@ -36,7 +36,7 @@ class KeywordsExtractor:
         response = self.client.complete(
             model=self.model_name,
             messages=prompt,
-            max_tokens=200,
+            max_tokens=500,
             temperature=0.1,
             top_p=1.0,
             frequency_penalty=0.0,
@@ -45,6 +45,6 @@ class KeywordsExtractor:
         
         if response:
             keywords = self.parser.parse(response.choices[0].message.content)
-            return keywords
+            return keywords.search_term
         else:
             raise ValueError("No response from the model")
