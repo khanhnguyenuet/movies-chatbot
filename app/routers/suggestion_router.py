@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from ..processors.suggestions import MoviesSuggestions
-from ..models.keywords import MoviesProperties
+from processors.suggestions import MoviesSuggestions
+from models.keywords import MoviesProperties
 
 router = APIRouter(prefix="/suggestions", tags=["suggestions"])
 

@@ -3,8 +3,8 @@ from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
-from ..prompts.keywords import KEYWORDS_SYSTEM_PROMPT, KEYWORDS_REQUEST
-from ..models.keywords import Keywords, MoviesProperties
+from prompts.keywords import KEYWORDS_SYSTEM_PROMPT, KEYWORDS_REQUEST
+from models.keywords import Keywords, MoviesProperties
 
 from langchain_core.output_parsers import PydanticOutputParser
 
