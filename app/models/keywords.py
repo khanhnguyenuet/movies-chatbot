@@ -37,3 +37,8 @@ class Keywords(BaseModel):
     search_term: MoviesProperties = Field(
         description="The keywords to search for",
     )
+    
+class Movies(BaseModel):
+    movie_list: List[MoviesProperties] = Field(
+        description="List of movies",
+    )
