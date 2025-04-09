@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from processors.keywords import KeywordsExtractor
+from ..processors.keywords import KeywordsExtractor
 
 router = APIRouter(prefix="/keywords", tags=["keywords"])
 

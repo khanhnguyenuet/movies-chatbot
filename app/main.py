@@ -1,6 +1,6 @@
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import keyword_router, suggestion_router
+from .routers import keyword_router, suggestion_router
 
 import uvicorn
 
@@ -32,6 +32,3 @@ app.include_router(api_router)
 @app.get("/")
 def read_root():
     return {"message": "INT6024 - Movie recommendations API"}
-
-if __name__ == "__main__":
-    uvicorn.run("main:app", host="0.0.0.0", port=8000, reload=False)
