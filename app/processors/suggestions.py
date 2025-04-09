@@ -8,7 +8,7 @@ from azure.search.documents.indexes.models import (
     SearchIndex, SimpleField, SearchableField, SearchFieldDataType
 )
 
-from models.keywords import Keywords, MoviesProperties
+from app.models.keywords import Keywords, MoviesProperties
 
 from langchain_core.output_parsers import PydanticOutputParser
 

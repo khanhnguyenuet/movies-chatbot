@@ -4,7 +4,7 @@ services:
     image: movies_cloud
     container_name: movies_cloud
     ports:
-      - "8000:8000"
+      - "8008:8008"
     volumes:
       - ./app:/home/app
     env_file:

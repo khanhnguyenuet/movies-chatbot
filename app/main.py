@@ -1,6 +1,6 @@
 from fastapi import APIRouter, FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from routers import keyword_router, suggestion_router
+from app.routers import keyword_router, suggestion_router, verify_router
 
 import uvicorn
 
@@ -25,6 +25,7 @@ api_router = APIRouter(prefix="/api/v1")
 # Include all routers
 api_router.include_router(keyword_router.router)
 api_router.include_router(suggestion_router.router)
+api_router.include_router(verify_router.router)
 
 # Include the main router
 app.include_router(api_router)
