@@ -8,9 +8,35 @@ from azure.search.documents.indexes.models import (
     SearchIndex, SimpleField, SearchableField, SearchFieldDataType
 )
 
-from ..models.keywords import Keywords, MoviesProperties
+from openai import AzureOpenAI
+from uuid import uuid4
+
+from ..models.keywords import Keywords, MoviesProperties, Movies
 
 from langchain_core.output_parsers import PydanticOutputParser
+
+class EmbeddingModel:
+    def __init__(self):
+        self.client = AzureOpenAI(
+            api_version="2024-12-01-preview",
+            endpoint=os.getenv("AZURE_OPENAI_EMBEDDING_ENDPOINT"),
+            credential=AzureKeyCredential(os.getenv("AZURE_OPENAI_EMBEDDING_MODEL_API_KEY"))
+        )
+        
+        self.deployment_name = os.getenv("EMBEDDING_DEPLOYMENT_NAME")
+        self.model_name = os.getenv("EMBEDDING_MODEL_NAME")
+        self.model_version = os.getenv("EMBEDDING_MODEL_VERSION")
+        
+    def generate_embedding(self, input_txts):
+        if isinstance(input_txts, str):
+            input_txts = [input_txts]
+            
+        response = self.client.embeddings.create(
+            input=input_txts,
+            model=self.deployment_name
+        )
+        
+        return response
 
 class MoviesSuggestions:
     def __init__(self):
@@ -20,6 +46,7 @@ class MoviesSuggestions:
         self.search_client = SearchClient(endpoint=os.getenv("AZURE_SEARCH_ENDPOINT"), 
                                           index_name=self.index_name, 
                                           credential=AzureKeyCredential(os.getenv("AZURE_SEARCH_KEY")))
+        self.embedding_service = EmbeddingModel()
         
     def __call__(self, request: MoviesProperties) -> dict:
         search_queries = []
@@ -58,3 +85,26 @@ class MoviesSuggestions:
         if return_search_list:
             return suggestions, suggestions_list
         return suggestions, None
+    
+    def _update_index(self, movie: Movies):
+        list_movies = movie.movie_list
+        documents = []
+        for m in list_movies:
+            document = {
+                "id": uuid4(),
+                "names": m.name,
+                "date_x": m.date,
+                "score": m.score,
+                "crew": m.crews,
+                "orig_title": m.name,
+                "status": m.status,
+                "budget_x": m.budget,
+                "revenue": m.revenue,
+                "overview": m.overview,
+                "genre": m.genre,
+                "orig_lang": m.lang,
+                "country": m.country,
+            }  
+            documents.append(document)
+            
+        self.search_client.upload_documents(documents)

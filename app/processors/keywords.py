@@ -31,7 +31,7 @@ class KeywordsExtractor:
         parser = PydanticOutputParser(pydantic_object=Keywords)
         return parser
     
-    def extract_keywords(self, query) -> Keywords:
+    def extract_keywords(self, query) -> MoviesProperties:
         prompt = self._set_up_prompt(query)
         response = self.client.complete(
             model=self.model_name,
