@@ -8,3 +8,11 @@ class VerifyRequest(BaseModel):
 class VerifyResponse(BaseModel):
     is_suitable: bool = Field(..., description="Whether the suggestions are suitable for the user's query")
     reason: str = Field(..., description="Brief explanation of why the suggestions are suitable or not")
+    
+class VerificationResult(BaseModel):
+    is_suitable: bool = Field(
+        description="Whether the suggestions are suitable for the user's query (True/False)"
+    )
+    reason: str = Field(
+        description="Brief explanation of why the suggestions are suitable or not"
+    )

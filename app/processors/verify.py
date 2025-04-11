@@ -2,19 +2,13 @@ import os
 from azure.ai.inference import ChatCompletionsClient
 from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
-from pydantic import BaseModel, Field
-from typing import List
 
-from app.prompts.verify import VERIFY_SYSTEM_PROMPT, VERIFY_SUGGESTION_REQUEST
+from ..prompts.verify import VERIFY_SYSTEM_PROMPT, VERIFY_SUGGESTION_REQUEST
+from ..models.verify_models import VerificationResult
+from ..logging import *
 from langchain_core.output_parsers import PydanticOutputParser
 
-class VerificationResult(BaseModel):
-    is_suitable: bool = Field(
-        description="Whether the suggestions are suitable for the user's query (True/False)"
-    )
-    reason: str = Field(
-        description="Brief explanation of why the suggestions are suitable or not"
-    )
+logger = init_logger(__name__)
 
 class SuggestionVerifier:
     def __init__(self):
@@ -42,6 +36,7 @@ class SuggestionVerifier:
         
         return message
     
+    @time_logger(logger)
     def verify_suggestions(self, query: str, suggestions: str) -> VerificationResult:
         prompt = self._set_up_prompt(query, suggestions)
         response = self.client.complete(

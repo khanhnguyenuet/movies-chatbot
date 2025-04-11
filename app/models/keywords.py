@@ -17,7 +17,7 @@ class MoviesProperties(BaseModel):
     status: Optional[bool] = Field(
         description="The status of the movie",
     )
-    lang: Optional[str] = Field(
+    lang: Optional[List[str]] = Field(
         description="The language of the movie",
     )
     crews: Optional[List[str]] = Field(
@@ -39,6 +39,10 @@ class Keywords(BaseModel):
     )
     
 class Movies(BaseModel):
-    movie_list: List[MoviesProperties] = Field(
+    movie_list: Optional[List[MoviesProperties]] = Field(
         description="List of movies",
+    )
+    
+    movie_links: Optional[List[str]] = Field(
+        description="The links to the movies"
     )

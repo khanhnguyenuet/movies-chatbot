@@ -5,8 +5,11 @@ from azure.core.credentials import AzureKeyCredential
 
 from ..prompts.keywords import KEYWORDS_SYSTEM_PROMPT, KEYWORDS_REQUEST
 from ..models.keywords import Keywords, MoviesProperties
+from ..logging import *
 
 from langchain_core.output_parsers import PydanticOutputParser
+
+logger = init_logger(__name__)
 
 class KeywordsExtractor:
     def __init__(self):
@@ -31,6 +34,7 @@ class KeywordsExtractor:
         parser = PydanticOutputParser(pydantic_object=Keywords)
         return parser
     
+    @time_logger(logger)
     def extract_keywords(self, query) -> MoviesProperties:
         prompt = self._set_up_prompt(query)
         response = self.client.complete(

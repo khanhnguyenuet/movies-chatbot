@@ -12,15 +12,18 @@ from openai import AzureOpenAI
 from uuid import uuid4
 
 from ..models.keywords import Keywords, MoviesProperties, Movies
+from ..logging import *
 
 from langchain_core.output_parsers import PydanticOutputParser
+
+logger = init_logger(__name__)
 
 class EmbeddingModel:
     def __init__(self):
         self.client = AzureOpenAI(
             api_version="2024-12-01-preview",
-            endpoint=os.getenv("AZURE_OPENAI_EMBEDDING_ENDPOINT"),
-            credential=AzureKeyCredential(os.getenv("AZURE_OPENAI_EMBEDDING_MODEL_API_KEY"))
+            azure_endpoint=os.getenv("AZURE_OPENAI_EMBEDDING_ENDPOINT"),
+            api_key=os.getenv("AZURE_OPENAI_EMBEDDING_MODEL_API_KEY")
         )
         
         self.deployment_name = os.getenv("EMBEDDING_DEPLOYMENT_NAME")
@@ -47,18 +50,35 @@ class MoviesSuggestions:
                                           index_name=self.index_name, 
                                           credential=AzureKeyCredential(os.getenv("AZURE_SEARCH_KEY")))
         self.embedding_service = EmbeddingModel()
-        
+    
+    @time_logger(logger)   
     def __call__(self, request: MoviesProperties) -> dict:
+        search_queries = self._create_search_query(request)
+        
+        logger.info(f"Find total {len(search_queries)} SEARCH QUERIES")
+        suggestions, suggestions_list = self._create_suggestions(search_queries)
+        return suggestions, suggestions_list
+    
+    @staticmethod
+    def standardize_string(input_str):
+        parts = [part.strip().title() for part in input_str.split(',')]
+        return ', '.join(parts)
+    
+    def _create_search_query(self, request: MoviesProperties) -> list:
         search_queries = []
         for k, v in request:
             if v is None: continue
             
-            if isinstance(v, list):
-                query = " and ".join([f"{k}/any(x: x eq '{item}')" for item in v])
+            if isinstance(v, list) and k == "genre":
+                query_and = " and ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
+                query_or = " or ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
+                search_queries += [query_and, query_or]
+            
+            elif isinstance(v, list):
+                query = " and ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
                 search_queries.append(query)
         
-        suggestions, suggestions_list = self._create_suggestions(search_queries)
-        return suggestions, suggestions_list
+        return search_queries
     
     def _create_suggestions(self, search_quies: list, return_search_list=True) -> str:
         suggestions = []
@@ -67,21 +87,31 @@ class MoviesSuggestions:
             results = self.search_client.search(search_text="*", filter=query)
             results = list(results)
             if len(results) == 0:
+                logger.info(f"Query {i}: {query} // No results found")
                 continue
+            
+            logger.info(f"Query {i}: {query} // Found {len(results)} results")
             suggestions_list += results
             for result in results:
                 movie_name = result["names"]
                 movie_overview = result["overview"]
-                movie_genre = " ".join(result["genre"])
-                
+                movie_genre = ", ".join(result["genre"])
+                movie_actor = ", ".join(result["crew"])
                 
                 format_output = f"""
                 Name: {movie_name}, 
                 Overview: {movie_overview},
                 Genre: {movie_genre},
+                Actor: {movie_actor},
                 """
                 suggestions.append(format_output)
-        suggestions = "==========\n".join(suggestions)
+        
+        if len(suggestions) > 0:
+            suggestions = "==========\n".join(suggestions)
+        else:
+            logger.info("No suitable movie found")
+            suggestions = None
+            
         if return_search_list:
             return suggestions, suggestions_list
         return suggestions, None
@@ -89,15 +119,15 @@ class MoviesSuggestions:
     def _update_index(self, movie: Movies):
         list_movies = movie.movie_list
         documents = []
-        for m in list_movies:
+        for idx, m in enumerate(list_movies):
             document = {
-                "id": uuid4(),
+                "id": f"movie{idx+10}",
                 "names": m.name,
                 "date_x": m.date,
-                "score": m.score,
+                "score": 100.0,
                 "crew": m.crews,
                 "orig_title": m.name,
-                "status": m.status,
+                "status": "Released",
                 "budget_x": m.budget,
                 "revenue": m.revenue,
                 "overview": m.overview,
@@ -106,5 +136,9 @@ class MoviesSuggestions:
                 "country": m.country,
             }  
             documents.append(document)
-            
+        
+        if len(documents) == 0:
+            logger.info("No movies to update")
+            return
+        
         self.search_client.upload_documents(documents)
