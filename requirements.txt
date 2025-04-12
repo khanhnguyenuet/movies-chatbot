@@ -18,3 +18,4 @@ numpy==1.26.4
 openai==1.61.0
 urllib3==2.3.0
 uvicorn==0.34.0
+pyngrok==7.2.3

@@ -29,7 +29,6 @@ def pipeline(query: str):
     verify_rs = suggestion_verifier.verify_suggestions(suggestion, query)
     is_valid = verify_rs.is_suitable
     
-    print(is_valid)
     if not is_valid:
         # Perform web search
         suggestion, list_movies = web_search(keywords)
@@ -41,6 +40,9 @@ def pipeline(query: str):
 def film_suggestion(query: str):
     try:
         result = pipeline(query)
-        return result
+        return {
+            "response": result,
+            "query": query
+        }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

@@ -9,7 +9,8 @@ from azure.search.documents.indexes.models import (
 )
 
 from openai import AzureOpenAI
-from uuid import uuid4
+import random
+import string
 
 from ..models.keywords import Keywords, MoviesProperties, Movies
 from ..logging import *
@@ -64,6 +65,10 @@ class MoviesSuggestions:
         parts = [part.strip().title() for part in input_str.split(',')]
         return ', '.join(parts)
     
+    @staticmethod
+    def generate_custom_id(length=12):
+        return ''.join(random.choices(string.ascii_lowercase + string.digits, k=length))
+    
     def _create_search_query(self, request: MoviesProperties) -> list:
         search_queries = []
         for k, v in request:
@@ -71,8 +76,8 @@ class MoviesSuggestions:
             
             if isinstance(v, list) and k == "genre":
                 query_and = " and ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
-                query_or = " or ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
-                search_queries += [query_and, query_or]
+                # query_or = " or ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
+                search_queries += [query_and]
             
             elif isinstance(v, list):
                 query = " and ".join([f"{k}/any(x: x eq '{self.standardize_string(item)}')" for item in v])
@@ -121,10 +126,10 @@ class MoviesSuggestions:
         documents = []
         for idx, m in enumerate(list_movies):
             document = {
-                "id": f"movie{idx+10}",
+                "id": self.generate_custom_id(),
                 "names": m.name,
                 "date_x": m.date,
-                "score": 100.0,
+                "score": "100.0",
                 "crew": m.crews,
                 "orig_title": m.name,
                 "status": "Released",

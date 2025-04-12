@@ -10,9 +10,13 @@ REQUEST = """Use Bing Search Service to search at least 2 movies wich sastisfy t
 <instruction>
     1. In case you can not find any informations, return an EMTPY list.
     2. Only return the final result, do not add any other text.
-    3. Each movie's description includes: the name, the genre, and a short over view, a link (if possible)
-    4. Return in the following format:
+    3. Each movie's description includes: the name, the genre, and a short over view, a link (if possible).
+    4. Only return in JSON format.
+    5. Have to follow the following format:
+    <format>
         {format_instructions}
+    </format>
+    6. If any field in the above format is List type but the answer contains only one item, please wrap it in a list.
 </instruction>
 """
 

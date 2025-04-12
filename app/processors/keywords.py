@@ -41,8 +41,8 @@ class KeywordsExtractor:
             model=self.model_name,
             messages=prompt,
             max_tokens=500,
-            temperature=0.1,
-            top_p=1.0,
+            temperature=0.5,
+            top_p=.95,
             frequency_penalty=0.0,
             presence_penalty=0.0,
         )

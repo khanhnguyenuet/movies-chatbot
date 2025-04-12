@@ -2,10 +2,10 @@ from pydantic import BaseModel, Field
 from typing import Optional, List
 
 class MoviesProperties(BaseModel):
-    name: Optional[str] = Field(
+    names: Optional[str] = Field(
         description="The name of the movie",
     )
-    date: Optional[str] = Field(
+    date_x: Optional[str] = Field(
         description="The release date of the movie",
     )
     genre: Optional[List[str]] = Field(
@@ -17,19 +17,19 @@ class MoviesProperties(BaseModel):
     status: Optional[bool] = Field(
         description="The status of the movie",
     )
-    lang: Optional[List[str]] = Field(
+    orig_lang: Optional[List[str]] = Field(
         description="The language of the movie",
     )
-    crews: Optional[List[str]] = Field(
+    crew: Optional[List[str]] = Field(
         description="The name of actors, directors, and producers in the movie",
     )
     country: Optional[str] = Field(
         description="The country of the movie",
     )
-    budget: Optional[int] = Field(
+    budget_x: Optional[str] = Field(
         description="The budget of the movie",
     )
-    revenue: Optional[int] = Field(
+    revenue: Optional[str] = Field(
         description="The revenue of the movie",
     )
     
