@@ -1,7 +1,7 @@
 services:
   movies:
     build: .
-    image: movies_cloud:v2
+    image: movies_cloud:v4
     container_name: movies_cloud
     ports:
       - "8000:8000"
