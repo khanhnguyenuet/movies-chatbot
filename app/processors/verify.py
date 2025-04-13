@@ -4,7 +4,9 @@ from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
 from ..prompts.verify import VERIFY_SYSTEM_PROMPT, VERIFY_SUGGESTION_REQUEST
-from ..models.verify_models import VerificationResult
+from ..models.verify_models import Verification, VerifiedMovies
+from ..models.keywords import Movies
+
 from ..logging import *
 from langchain_core.output_parsers import PydanticOutputParser
 
@@ -21,7 +23,7 @@ class SuggestionVerifier:
         self.parser = self._set_up_parser()
     
     def _set_up_parser(self):
-        parser = PydanticOutputParser(pydantic_object=VerificationResult)
+        parser = PydanticOutputParser(pydantic_object=VerifiedMovies)
         return parser
     
     def _set_up_prompt(self, query: str, suggestions: str):
@@ -37,14 +39,14 @@ class SuggestionVerifier:
         return message
     
     @time_logger(logger)
-    def verify_suggestions(self, query: str, suggestions: str) -> VerificationResult:
-        prompt = self._set_up_prompt(query, suggestions)
+    def verify_suggestions(self, query: str, suggestions: Movies) -> VerifiedMovies:
+        prompt = self._set_up_prompt(query, str(suggestions.model_dump()))
         response = self.client.complete(
             model=self.model_name,
             messages=prompt,
-            max_tokens=500,
-            temperature=0.1,
-            top_p=1.0,
+            max_tokens=4000,
+            temperature=0.5,
+            top_p=.95,
             frequency_penalty=0.0,
             presence_penalty=0.0,
         )

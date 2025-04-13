@@ -14,8 +14,8 @@ class MoviesProperties(BaseModel):
     overview: Optional[str] = Field(
         description="A brief overview of the movie",
     )
-    status: Optional[bool] = Field(
-        description="The status of the movie",
+    status: Optional[str] = Field(
+        description="The status of the movie (Released, Upcoming, etc.)",
     )
     orig_lang: Optional[List[str]] = Field(
         description="The language of the movie",
@@ -24,13 +24,16 @@ class MoviesProperties(BaseModel):
         description="The name of actors, directors, and producers in the movie",
     )
     country: Optional[str] = Field(
-        description="The country of the movie",
+        description="The country of the movie represent by the country code",
     )
-    budget_x: Optional[str] = Field(
+    budget_x: Optional[float] = Field(
         description="The budget of the movie",
     )
-    revenue: Optional[str] = Field(
+    revenue: Optional[float] = Field(
         description="The revenue of the movie",
+    )
+    score : Optional[float] = Field(
+        description="The rating score of the movie",
     )
     
 class Keywords(BaseModel):

@@ -55,21 +55,31 @@ class AgentSearcher:
     
     @time_logger(logger)
     def search(self, prompt) -> Movies:
-        response = self.client.complete(
-            model=self.model_name,
-            messages=prompt,
-            max_tokens=1000,
-            temperature=1.0,
-            top_p=1.0,
-            frequency_penalty=0.0,
-            presence_penalty=0.0,
-        )
-        
-        if response:
-            output = self.parser.parse(response.choices[0].message.content)
-            return output
-        else:
-            raise ValueError("No response from the model")
+        num_call = 3
+        success = False
+        while not success and num_call > 0:
+            response = self.client.complete(
+                model=self.model_name,
+                messages=prompt,
+                max_tokens=2000,
+                temperature=.3,
+                top_p=.95,
+                frequency_penalty=0.0,
+                presence_penalty=0.0,
+            )
+            
+            if response:
+                try:
+                    output = self.parser.parse(response.choices[0].message.content)
+                    success = True
+                    return output
+                except Exception as e:
+                    logger.error(f"Error parsing response: {e}")
+                    num_call -= 1
+                    if num_call == 0:
+                        raise ValueError("Failed to parse response after multiple attempts")
+            else:
+                raise ValueError("No response from the model")
       
     def _create_condition(self, keywords: MoviesProperties) -> str:
         condition = ""
@@ -89,16 +99,16 @@ class AgentSearcher:
         suggestions_list = []
         
         for movie in search_results.movie_list:
-            movie_info = f"Name: {movie.name}\n"
+            movie_info = f"Name: {movie.names}\n"
             if movie.genre:
                 genre = ", ".join(movie.genre)
                 movie_info += f"Genre: {genre}\n"
             if movie.overview:
                 movie_info += f"Overview: {movie.overview}\n"
             if movie.status:
-                movie_info += f"Status: {'yes' if movie.status else 'no'}\n"
-            if movie.crews:
-                crews = ", ".join(movie.crews)
+                movie_info += f"Status: {movie.status}\n"
+            if movie.crew:
+                crews = ", ".join(movie.crew)
                 movie_info += f"Actors: {crews}\n"
             
             suggestions.append(movie_info)
