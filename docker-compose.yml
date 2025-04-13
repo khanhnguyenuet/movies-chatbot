@@ -9,3 +9,10 @@ services:
       - ./app:/home/app
     env_file:
       - ./app/.env
+  chat-ui:
+    image: chat-ui-streamlit:1.0
+    ports:
+      - "8501:8501"
+    environment:
+      - ENDPOINT_BASE_URL=https://movies-bhdshhgwexfegggf.canadacentral-01.azurewebsites.net/api/v1
+      - TMDB_API_KEY=0d7b40f3c01f3671491c71a5983d9db9
