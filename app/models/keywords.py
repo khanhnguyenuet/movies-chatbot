@@ -9,7 +9,7 @@ class MoviesProperties(BaseModel):
         description="The release date of the movie",
     )
     genre: Optional[List[str]] = Field(
-        description="The genre of the movie",
+        description="The LIST of genre of the movie",
     )
     overview: Optional[str] = Field(
         description="A brief overview of the movie",
@@ -18,10 +18,10 @@ class MoviesProperties(BaseModel):
         description="The status of the movie (Released, Upcoming, etc.)",
     )
     orig_lang: Optional[List[str]] = Field(
-        description="The language of the movie",
+        description="The The LIST of language of the movie",
     )
     crew: Optional[List[str]] = Field(
-        description="The name of actors, directors, and producers in the movie",
+        description="The The LIST of name of actors, directors, and producers in the movie",
     )
     country: Optional[str] = Field(
         description="The country of the movie represent by the country code",

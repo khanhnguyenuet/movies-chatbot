@@ -16,7 +16,7 @@ REQUEST = """Use Bing Search Service to search at least 2 movies wich sastisfy t
     <format>
         {format_instructions}
     </format>
-    6. If any field in the above format is List type but the answer contains only one item, please wrap it in a list.
+    6. If any field in the above format is List type but the answer contains only one item, please wrap it in a list. (e.g. "genre": "Action" should be changed to "genre": ["Action"]).
 </instruction>
 """
 
