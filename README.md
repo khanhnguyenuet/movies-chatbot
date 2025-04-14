@@ -16,9 +16,11 @@ Demo:
 |                    | Azure Search Service                                                       | Hỗ trợ về Vector Search, lưu trữ và tổ chức Database hiệu quả               |
 |                    | Azure AI Service                                                       | Cung cấp các mô hình AI (LLM, Embedding) phục vụ xử lý các truy vấn từ người dùng.                  |
 |                    | Azure Bing Search                                                       | Dịch vụ Web Search, tích hợp cùng các dịch vụ AI của Azure hỗ trợ tìm kiếm thông tin qua Bing.                  |
-| **AWS**            | AWS Lambda                                                           | Xử lý các yêu cầu gợi ý phim một cách nhanh chóng và hiệu quả       |
-|                    | AWS S3                                                               | Lưu trữ dữ liệu hình ảnh và tài nguyên khác                         |
-|                    | Amazon RDS (MySQL)                                                    | Lưu trữ dữ liệu người dùng và phim                                  |
+| **AWS**            | AWS ECR                                                            | Hỗ trợ lưu trữ các image cho Frontend       |
+|                    | AWS ECS + Fargate                                                              | Hỗ trợ triển khai service Frontend                         |
+|                    | AWS ELB                                                    | Tạo Load Balancer cho Web UI                                  |
+|                    | AWS VPC                                                    | Thiết lập Network cho Web UI                                 |
+
 
 ### Thành Viên Dự Án 👩‍💻👨‍💻
 
@@ -62,7 +64,7 @@ Demo:
 
 - Frontend được triển khai lên **AWS Lambda**, sử dụng dịch vụ **API Gateway** để phục vụ các API cho frontend.
 
-![Deploy Frontend](https://link-to-your-image.com/deploy-frontend.png)
+![Deploy Frontend](assests/FE_depl.jpg)
 
 ---
 
