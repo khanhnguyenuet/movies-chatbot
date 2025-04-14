@@ -56,13 +56,13 @@ Demo:
 
 - Backend được triển khai lên **Azure App Service** thông qua **Azure Container Registry**.
 
-![Deploy Frontend](https://link-to-your-image.com/deploy-frontend.png)
+![Deploy Backend](assests/deployBE.jpg)
 
 #### **Triển Khai Frontend**
 
 - Frontend được triển khai lên **AWS Lambda**, sử dụng dịch vụ **API Gateway** để phục vụ các API cho frontend.
 
-![Deploy Backend](assests/deployBE.jpg)
+![Deploy Frontend](https://link-to-your-image.com/deploy-frontend.png)
 
 ---
 
