@@ -62,7 +62,7 @@ Demo:
 
 #### **Triển Khai Frontend**
 
-- Frontend được triển khai lên **AWS Lambda**, sử dụng dịch vụ **API Gateway** để phục vụ các API cho frontend.
+- Frontend được triển khai lên **AWS Cloud** bằng AWS ECS + Fargate.
 
 ![Deploy Frontend](assests/FE_depl.jpg)
 
