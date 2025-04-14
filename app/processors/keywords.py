@@ -4,9 +4,12 @@ from azure.ai.inference.models import SystemMessage, UserMessage
 from azure.core.credentials import AzureKeyCredential
 
 from ..prompts.keywords import KEYWORDS_SYSTEM_PROMPT, KEYWORDS_REQUEST
-from ..models.keywords import Keywords
+from ..models.keywords import Keywords, MoviesProperties
+from ..logging import *
 
 from langchain_core.output_parsers import PydanticOutputParser
+
+logger = init_logger(__name__)
 
 class KeywordsExtractor:
     def __init__(self):
@@ -31,20 +34,21 @@ class KeywordsExtractor:
         parser = PydanticOutputParser(pydantic_object=Keywords)
         return parser
     
-    def extract_keywords(self, query) -> Keywords:
+    @time_logger(logger)
+    def extract_keywords(self, query) -> MoviesProperties:
         prompt = self._set_up_prompt(query)
         response = self.client.complete(
             model=self.model_name,
             messages=prompt,
-            max_tokens=200,
-            temperature=0.1,
-            top_p=1.0,
+            max_tokens=500,
+            temperature=0.5,
+            top_p=.95,
             frequency_penalty=0.0,
             presence_penalty=0.0,
         )
         
         if response:
             keywords = self.parser.parse(response.choices[0].message.content)
-            return keywords
+            return keywords.search_term
         else:
             raise ValueError("No response from the model")
