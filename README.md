@@ -42,7 +42,7 @@ Demo:
 - Ứng dụng được xây dựng với **StreamLit**, kết nối với backend qua API.
 - **Frontend** hiển thị các gợi ý phim, cho phép người dùng nhập truy vấn và nhận kết quả từ hệ thống.
 
-![Frontend Architecture](https://link-to-your-image.com/frontend-architecture.png)
+![Frontend Architecture](assests/UI_sample.png)
 
 #### **Backend**
 
