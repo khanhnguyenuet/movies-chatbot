@@ -1,6 +1,6 @@
 services:
   movies:
-    build: /app/
+    build: ./app/
     image: movies_cloud
     container_name: movies_cloud
     ports:
@@ -10,7 +10,7 @@ services:
     env_file:
       - ./app/.env
   chat-ui:
-    build: /ui/
+    build: ./ui/
     image: chat-ui-streamlit
     container_name: chat_ui
     ports:

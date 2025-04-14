@@ -1,8 +1,8 @@
 FROM python:3.10.16-alpine
 
-WORKDIR /home/
+WORKDIR /home
 
-COPY /app/requirements.txt /home/
+COPY ./requirements.txt /home
 
 RUN pip install --no-cache-dir -r requirements.txt
 RUN mkdir app
