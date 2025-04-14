@@ -10,7 +10,9 @@ services:
     env_file:
       - ./app/.env
   chat-ui:
-    image: chat-ui-streamlit:1.0
+    build: /ui/
+    image: chat-ui-streamlit
+    container_name: chat_ui
     ports:
       - "8501:8501"
     environment:
