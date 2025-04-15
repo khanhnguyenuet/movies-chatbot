@@ -5,7 +5,7 @@
 Dự án xây dựng một ứng dụng gợi ý phim thông minh, giúp người dùng tìm kiếm và nhận gợi ý phim dựa trên các truy vấn đầu vào. Dự án sử dụng các dịch vụ trên **Azure Cloud** và **AWS** để triển khai backend và frontend, giúp tối ưu hóa hiệu suất và khả năng mở rộng của ứng dụng.
 
 Demo:
-[Demo](demo_path.mp4)
+[Demo](assests/demo.mp4)
 
 ### Các Cloud và Service Đã Dùng 🌐
 
