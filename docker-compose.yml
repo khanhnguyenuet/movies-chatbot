@@ -15,6 +15,8 @@ services:
     container_name: chat_ui
     ports:
       - "8501:8501"
+    depends_on:
+      - movies
     environment:
-      - ENDPOINT_BASE_URL=https://movies-bhdshhgwexfegggf.canadacentral-01.azurewebsites.net/api/v1
+      - ENDPOINT_BASE_URL=http://movies:8000/api/v1
       - TMDB_API_KEY=0d7b40f3c01f3671491c71a5983d9db9
