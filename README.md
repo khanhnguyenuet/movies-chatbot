@@ -122,3 +122,18 @@ docker compose-up -d
 ```
 
 Phần **Backend** sẽ chạy ở đường link ```http://localhost:8000/```, **Frontend** sẽ chạy ở đường link ```http://localhost:8501/```.
+
+Lưu ý: 
+- Đảm bảo Docker và Docker Compose đã được cài đặt trên máy trước khi chạy các lệnh trên.
+- Khi chạy ứng dụng bằng `docker-compose`, nếu có lỗi về port hoặc conflict, kiểm tra và giải phóng các port 8000 (Backend) và 8501 (Frontend).
+- Trong quá trình phát triển, có thể vào trực tiếp thư mục `app` hoặc `ui` để chạy riêng từng phần nếu cần debug.
+- Nếu muốn dừng ứng dụng, sử dụng lệnh:
+  
+    ```bash
+    docker compose down
+    ```
+- Để chạy ứng dụng cần có file ```.env``` trong folder ```/app/```, tuy nhiên do vấn đề bảo mật file này không được đưa lên repository công khai, cần liên hệ trưởng nhóm thông qua mail:
+**Nguyễn Quốc Khánh**  
+  📧 `kqn2000k@gmail.com`
+  📧 `24025024@vnu.edu.vn`
+
